@@ -8,18 +8,23 @@ import RecentExpense from './screens/RecentExpense';
 import AllExpenses from './screens/AllExpenses';
 import { GlobalStyle } from './constants/styles';
 import { Ionicons } from '@expo/vector-icons';
+import IconButton from './UI/IconButton';
 
 const Stack = createNativeStackNavigator();
 const BottomTabs = createBottomTabNavigator();
 
 function ExpensesOverview(){
   return <BottomTabs.Navigator 
-    screenOptions={{
+    screenOptions={({navigation})=>({
       headerStyle:{backgroundColor:GlobalStyle.colors.primary600},
       headerTintColor:"white",
       tabBarStyle:{backgroundColor:GlobalStyle.colors.primary600},
-      tabBarActiveTintColor:GlobalStyle.colors.accent500
-    }}
+      tabBarActiveTintColor:GlobalStyle.colors.accent500,
+      headerRight:({tintColor})=>(<IconButton icon="add" size={24} color={tintColor} onPress={()=>{
+        navigation.navigate("ManageExpense")
+      }} />),
+
+    })}
   >
     <BottomTabs.Screen name='RecentExpenses' 
     component={RecentExpense}
@@ -46,7 +51,9 @@ export default function App() {
     <>
       <StatusBar style='auto' />
        <NavigationContainer>
-          <Stack.Navigator>
+          <Stack.Navigator screenOptions={{
+            headerStyle:{backgroundColor:GlobalStyle.colors.primary600}
+          }}>
             <Stack.Screen name='ExpensesOverview' 
             component={ExpensesOverview} 
             options={{
@@ -55,7 +62,9 @@ export default function App() {
             />
             <Stack.Screen name='ManageExpense' 
             component={ManageExpense}
-            
+            options={{
+              presentation:"modal",
+            }}
             />
           </Stack.Navigator>
        </NavigationContainer>
