@@ -20,20 +20,12 @@ const ManageExpense = ({route, navigation}) => {
   const cancelHandler = ()=>{
     navigation.goBack()
   }
-  const confirmHandler = ()=>{
+  const confirmHandler = (expenseData)=>{
     if(isEditing){
-      expensesCtx.updateExpense(editedExpenseId,{
-        description:"test11111", 
-        amount:29.99,
-        date:new Date("2024-10-03"),
-      })
+      expensesCtx.updateExpense(editedExpenseId, expenseData)
     }
     else{
-      expensesCtx.addExpense({
-        description:"test", 
-        amount:19.99,
-        date:new Date("2024-10-02"),
-      })
+      expensesCtx.addExpense(expenseData)
     }
     navigation.goBack()
   }
@@ -47,15 +39,12 @@ const ManageExpense = ({route, navigation}) => {
 
   return (
     <View style={styles.container}>
-      <ExpenseForm />
-      <View style={styles.buttons}>
-        <Button style={styles.button} mode="flat" onPress={cancelHandler}>
-          Cancel
-        </Button>
-        <Button style={styles.button} 
-        onPress={confirmHandler}>
-          {isEditing ? "Update" : "Add"}</Button>
-      </View>
+      <ExpenseForm 
+      submitButtonLabel={isEditing ? "Update" : "Add"}
+      onCancel={cancelHandler} 
+      onSubmit={confirmHandler}
+      />
+      
       {isEditing &&( 
         <View style={styles.deleteContainer}> 
           <IconButton icon="trash" 
@@ -81,13 +70,5 @@ const styles = StyleSheet.create({
     borderTopColor:GlobalStyle.colors.primary200,
     alignItems:"center"
   },
-  buttons:{
-    flexDirection:"row",
-    justifyContent:"center",
-    alignItems:"center"
-  },
-  button:{
-    minWidth:120,
-    marginHorizontal:8
-  }
+  
 })
