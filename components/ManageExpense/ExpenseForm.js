@@ -3,18 +3,19 @@ import React, { useState } from 'react'
 import Input from './Input'
 import Button from '../../UI/Button'
 import { getFormattedDate } from '../../util/date'
+import { GlobalStyle } from '../../constants/styles'
 
 const ExpenseForm = ({submitButtonLabel, onCancel, onSubmit, defaultValues}) => {
   const [inputs, setInputs]=useState({
     amount:
     {value: defaultValues ? defaultValues.amount.toString() : "",
-      isValid:defaultValues ? true : false,
+      isValid:true,
     },
     date:{value: defaultValues ? getFormattedDate(defaultValues.date) : "",
-      isValid:defaultValues ? true : false
+      isValid:true
     },
     description:{value: defaultValues ? defaultValues.description : "",
-      isValid:defaultValues ? true : false
+      isValid:true
     }
   })
     const inputChangeHandler=(inputIdentifier, enteredValue)=>{
@@ -54,6 +55,7 @@ const ExpenseForm = ({submitButtonLabel, onCancel, onSubmit, defaultValues}) => 
 
       onSubmit(expenseData)
     }
+    const fromIsInvalid = !inputs.amount.isValid || !inputs.date.isValid || !inputs.description.isValid
   return (
     <View style={styles.form}>
       <Text style={styles.title}>Your Expense</Text>
@@ -61,6 +63,7 @@ const ExpenseForm = ({submitButtonLabel, onCancel, onSubmit, defaultValues}) => 
         <Input 
         label="Amount" 
         style={styles.rowInput}
+        invalid={!inputs.amount.isValid}
         textInputConfig={{
           keyboardType:"decimal-pad",
           onChangeText:inputChangeHandler.bind(this, 'amount'),
@@ -68,6 +71,7 @@ const ExpenseForm = ({submitButtonLabel, onCancel, onSubmit, defaultValues}) => 
         }}/>
         <Input label="Date"
         style={styles.rowInput}
+        invalid={!inputs.date.isValid}
         textInputConfig={{
           placeHolder:"yyyy-mm-dd",
           maxLength:10,
@@ -76,7 +80,9 @@ const ExpenseForm = ({submitButtonLabel, onCancel, onSubmit, defaultValues}) => 
         }}
         />
       </View>
-      <Input label="Description"
+      <Input 
+      label="Description"
+      invalid={!inputs.description.isValid}
       textInputConfig={{
         multiline:true,
         // autoCapitalize:"none"
@@ -86,6 +92,8 @@ const ExpenseForm = ({submitButtonLabel, onCancel, onSubmit, defaultValues}) => 
       }}
 
       />
+      {fromIsInvalid && 
+      <Text style={styles.errorText}>Error: check your input</Text>}
 
       <View style={styles.buttons}>
         <Button style={styles.button} mode="flat" onPress={onCancel}>
@@ -112,6 +120,11 @@ const styles = StyleSheet.create({
   },
   rowInput:{
     flex:1,
+  },
+  errorText:{
+    textAlign:"center",
+    color:GlobalStyle.colors.error500,
+    margin:8,
   },
   title:{
     fontSize:18,
