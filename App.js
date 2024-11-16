@@ -10,6 +10,7 @@ import { GlobalStyle } from './constants/styles';
 import { Ionicons } from '@expo/vector-icons';
 import IconButton from './UI/IconButton';
 import ExpensesContextProvider from './store/expenses-context';
+import Report from './screens/Report';
 
 const Stack = createNativeStackNavigator();
 const BottomTabs = createBottomTabNavigator();
@@ -42,6 +43,15 @@ function ExpensesOverview(){
       tabBarLabel:"All Expenses",
       tabBarIcon:({color, size})=><Ionicons 
       name="calendar" size={size} color={color} />
+    }}
+    />
+    <BottomTabs.Screen name='Report' 
+    component={Report} 
+    options={{
+      title:"Report",
+      tabBarLabel:"Report",
+      tabBarIcon:({color, size})=><Ionicons 
+      name="analytics" size={size} color={color} />
     }}
     />
   </BottomTabs.Navigator>
